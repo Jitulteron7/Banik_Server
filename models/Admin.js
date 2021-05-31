@@ -1,5 +1,5 @@
 let mongoose = require("mongoose");
-
+let bcrypt=require("bcrypt");
 let AdminSchema = new mongoose.Schema({
   fname:{
       type:String,
@@ -11,14 +11,32 @@ let AdminSchema = new mongoose.Schema({
   },
   profit:{
       type:Number,
-      default:5,
+      default:0,
   },
   email:{
-      type:String
+      type:String,
+      required:true,
+      unique:true
   },
+  password:{
+      type:String,
+      required:true,
+  },
+  profile:{
+      type:Buffer
+  }
   
 });
 
-const AdminModel = mongoose.model("Message", AdminSchema);
+AdminSchema.pre("save", async function (next) {
+    var admin = this;
+    if (admin.isModified("password")) {
+        admin.password = await bcrypt.hash(admin.password, 8);
+    }
+
+    next();
+});
+
+const AdminModel = mongoose.model("Admin", AdminSchema);
 
 module.exports = AdminModel;

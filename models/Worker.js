@@ -1,9 +1,18 @@
 let mongoose = require("mongoose");
+let {v4:uuid} =require("uuid")
 
 let WorkerSchema = new mongoose.Schema({
-  name: {
+  fname: {
     type: String,
     required: true,
+  },
+  lname:{
+    type: String,
+    required: true,
+  },
+  uniqueId:{
+    type:String,
+    unique: true,
   },
   email: {
     type: String,
@@ -20,18 +29,17 @@ let WorkerSchema = new mongoose.Schema({
     city: { type: String },
     pin: { type: Number },
   },
-  accout_id: { type: String },
-
   work_type: String,
 
   specialization: String,
 
   working_status: {
     start: {
-      type: Date,
+      type: String,
     },
     exp: {
-      type: Date,
+      type: String,
+      deault:0,
     },
   },
   photo:{
@@ -39,6 +47,13 @@ let WorkerSchema = new mongoose.Schema({
   }
 });
 
-const WorkerModel = mongoose.model("Worker", WorkerSchema);
+WorkerSchema.pre("save", async function (next) {
+  var worker = this;
+  if (worker.isModified("fname")) {
+    worker.uniqueId = `${worker.fname[0]}${worker.lname[0]}_${uuid().substring(0,10)}`
+  }
+  next();
+});
 
+const WorkerModel = mongoose.model("Worker", WorkerSchema);
 module.exports = WorkerModel;

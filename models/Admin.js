@@ -33,7 +33,6 @@ AdminSchema.pre("save", async function (next) {
     if (admin.isModified("password")) {
         admin.password = await bcrypt.hash(admin.password, 8);
     }
-
     next();
 });
 

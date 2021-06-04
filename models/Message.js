@@ -1,9 +1,15 @@
 let mongoose = require("mongoose");
 
 let MessageSchema = new mongoose.Schema({
-  message:{
+    admin:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Admin",
+        default:"60b9faafcb1dc019406ff1d8"
+    },
+   message:{
       type:String,
-      required:true
+      required:true,
+      default:"Default text message",
   },
   amount:{
       type:Number,
@@ -11,14 +17,14 @@ let MessageSchema = new mongoose.Schema({
   },
   commision:{
       type:Number,
-      default:5,
+      default:0,
   },
-  date:{
-      type:Date
+  dateRecent:{
+      type:Date,
   },
-  status:{
-      type:Boolean,
-  },
+  workerRecent:{
+    type:Object
+  }
 
 });
 

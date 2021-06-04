@@ -26,16 +26,19 @@ let WorkerSchema = new mongoose.Schema({
   address: {
     country: { type: String },
     state: { type: String },
-    city: { type: String },
+    city_village: { type: String },
     pin: { type: Number },
+    houseno: { type: Number },
+    addressarea:{type:String}
+
   },
   work_type: String,
 
   specialization: String,
 
   working_status: {
-    start: {
-      type: String,
+    start:{
+      type: Date,
     },
     exp: {
       type: String,
@@ -44,16 +47,18 @@ let WorkerSchema = new mongoose.Schema({
   },
   photo:{
       type:Buffer
-  }
+  },
 });
 
 WorkerSchema.pre("save", async function (next) {
   var worker = this;
   if (worker.isModified("fname")) {
-    worker.uniqueId = `${worker.fname[0]}${worker.lname[0]}_${uuid().substring(0,10)}`
+    worker.uniqueId = `${worker.fname[0]}${worker.lname[0]}_${uuid().substring(0,3)}`
   }
   next();
 });
 
+
 const WorkerModel = mongoose.model("Worker", WorkerSchema);
 module.exports = WorkerModel;
+

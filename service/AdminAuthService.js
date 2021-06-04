@@ -88,8 +88,10 @@ class adminAuthService {
   }
 
   async forgotpassword(email) {
-    const user = await this._UserModel.findOne({ email });
-
+    console.log(email.value,"forgotpassword")
+    let Email=email.value
+    const user = await this.AdminModel.findOne({ email:Email  });
+console.log(user)
     if (!user) {
       const err = new Error("Enter email once again");
       err.statusCode = 404;
@@ -97,21 +99,42 @@ class adminAuthService {
       throw err;
     }
     const token = this._generateForgotPasswordToken(user);
-    await this._MailService.sendForgotPasswordMail(user, token);
+    await this.MailService.sendForgotPasswordMail(user, token);
   }
 
   async resetpassword(id, token, password) {
-    const user = await this._UserModel.findById(id);
-    if (!user) {
-      const err = new Error("No Such User");
+    const admin = await this.AdminModel.findById(id);
+    if (!admin) {
+      const err = new Error("No Such admin");
       err.statusCode = 404;
       err.name = "NotFound";
       throw err;
     }
-    this._checkResetToken(user._id, token);
-    user.password = password;
-    await user.save();
-    return this._toJSON(user);
+    this._checkResetToken(admin._id, token);
+    admin.password = password.value;
+    await admin.save();
+    admin.password=undefined;
+    return this._toJSON(admin);
+  }
+  async updatepassword(id, password) {
+    const admin = await this.AdminModel.findById(id);
+    admin.password = password;
+    await admin.save();
+    admin.password=undefined;
+    return this._toJSON(admin);
+  }
+
+  async updateAdminPorfile({details},id) {
+    console.log(details,"fname")
+    let result =await this.AdminModel.findByIdAndUpdate(id,{
+      fname:details.firstName,
+      lname:details.lastName,
+      email:details.email,
+      profit:details.profit
+    },{
+      new:true
+    });
+    return result;
   }
 }
 

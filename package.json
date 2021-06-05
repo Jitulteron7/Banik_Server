@@ -1,5 +1,5 @@
 {
-  "name": "Banil server version 1",
+  "name": "banil_server_version_1",
   "version": "1.0.0",
   "description": "backend for banik",
   "main": "index.js",

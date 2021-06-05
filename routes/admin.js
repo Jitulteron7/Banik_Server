@@ -2,6 +2,7 @@ const route = require("express").Router();
 const auth = require("../middleware/auth");
 const asyncHandler = require("express-async-handler");
 const moment = require("moment");
+const {fromTo}=require("../utils/fromTo");
 // services
 const AdminAuthService = require("../service/AdminAuthService");
 const AdminService = require("../service/AdminService");
@@ -265,6 +266,28 @@ route.post(
   })
 );
 
+
+route.get(
+  "/getChartdata",
+  auth,
+  async (req, res, next) => {
+      try{
+        let {from,to}=fromTo("year");
+
+       let data= await  MessageSendModel.find({
+          messageDate:{
+            $gte:to,
+            $lt:from
+          }
+         }) 
+        res.status(200).json({data})
+      } 
+      catch(error){
+        console.log(error)
+        res.status(400).json({error})
+      }  
+  }
+);
 
 
 module.exports = route;

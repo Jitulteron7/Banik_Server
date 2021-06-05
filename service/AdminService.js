@@ -201,6 +201,9 @@ class adminService {
     console.log(msgdata, "msgSendData");
     return { msgdata, msgSendData };
   }
+  
 }
+
+
 
 module.exports = adminService;

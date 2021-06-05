@@ -1,16 +1,15 @@
 {
-  "name": "server",
+  "name": "Banil server version 1",
   "version": "1.0.0",
-  "description": "",
+  "description": "backend for banik",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js"
   },
-  "author": "",
+  "author": "Jitul Teron",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.917.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "chalk": "^4.1.1",

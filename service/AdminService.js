@@ -152,9 +152,8 @@ class adminService {
     let searchPattern = new RegExp(query, "i");
 
     let result = await this.MessageSendModel.find({});
-    // console.log(result[5].sendTo.fname.match(searchPattern))
     let data = result.filter((x) => x.sendTo.fname.match(searchPattern));
-    console.log(data, "daa");
+    
     return data;
   }
 
@@ -190,15 +189,18 @@ class adminService {
       );
       return { res, msgData, msgSendData, admin: adminnew };
     } else {
-      return false;
+      const err = new Error("Unable to send message. Phone no. may be invalid or sms service error");
+      err.statusCode = 400;
+      err.name = "Service or phone no";
+      throw err;
     }
   }
 
   async getMessageData(id) {
-    console.log("admin_id", id);
+    
     let msgdata = await this.MessageModel.find({ admin: id });
     let msgSendData = await this.MessageSendModel.find({});
-    console.log(msgdata, "msgSendData");
+    
     return { msgdata, msgSendData };
   }
   

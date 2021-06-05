@@ -34,7 +34,6 @@ app.use((error, req, res, next) => {
     });
 });
 
-
 // Database Connection and server listen...
 connectDB();
 

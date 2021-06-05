@@ -17,6 +17,7 @@ class adminAuthService {
   }
   async checkAuthToken(token) {
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
     if (!decoded) {
       const err = new Error("Unauthorized");
       err.statusCode = 401;
@@ -60,10 +61,11 @@ class adminAuthService {
   }
 
   async login(email, password) {
+
     const admin = await this.AdminModel.findOne({ email });
-    console.log(admin,"admin login")
+    
     if (!admin) {
-      const err = new Error("Unable To Login");
+      const err = new Error("Admin with this email not found");
       err.statusCode = 401;
       err.name = "Unauthorized";
       throw err;
@@ -72,7 +74,7 @@ class adminAuthService {
     const isMatched = await bcrypt.compare(password, admin.password);
 
     if (!isMatched) {
-      const err = new Error("Unable To Login");
+      const err = new Error("Password is invalid");
       err.statusCode = 401;
       err.name = "Unauthorized";
       throw err;
@@ -88,10 +90,10 @@ class adminAuthService {
   }
 
   async forgotpassword(email) {
-    console.log(email.value,"forgotpassword")
+
     let Email=email.value
     const user = await this.AdminModel.findOne({ email:Email  });
-console.log(user)
+
     if (!user) {
       const err = new Error("Enter email once again");
       err.statusCode = 404;
@@ -125,7 +127,7 @@ console.log(user)
   }
 
   async updateAdminPorfile({details},id) {
-    console.log(details,"fname")
+    
     let result =await this.AdminModel.findByIdAndUpdate(id,{
       fname:details.firstName,
       lname:details.lastName,
